@@ -30,14 +30,22 @@ public final class ElevatorOrder {
      */
     private final int targetFloor;
     
+    /**
+     * The moment at which the elevator client arrives to the queue of persons
+     * waiting for the elevator to arrive.
+     */
+    private final double orderTime;
+    
     private ElevatorOrder(ElevatorClient elevatorClient,
                           ElevatorShaft elevatorShaft,
                           int sourceFloor,
-                          int targetFloor) {
+                          int targetFloor,
+                          double orderTime) {
         this.elevatorClient = elevatorClient;
         this.elevatorShaft = elevatorShaft;
         this.sourceFloor = sourceFloor;
         this.targetFloor = targetFloor;
+        this.orderTime = orderTime;
     }
     
     public static ElevatorClientSelector createNew() {
@@ -104,11 +112,46 @@ public final class ElevatorOrder {
             this.sourceFloor = sourceFloor;
         }
         
-        public ElevatorOrder withTargetFloor(int targetFloor) {
+        public OrderTimeSelector withTargetFloor(int targetFloor) {
+            return new OrderTimeSelector(elevatorClient,
+                                         elevatorShaft,
+                                         sourceFloor,
+                                         targetFloor);
+        }
+    }
+    
+    public static final class OrderTimeSelector {
+        
+        private final ElevatorClient elevatorClient;
+        private final ElevatorShaft elevatorShaft;
+        private final int sourceFloor;
+        private final int targetFloor;
+        
+        private OrderTimeSelector(ElevatorClient elevatorClient,
+                                  ElevatorShaft elevatorShaft,
+                                  int sourceFloor,
+                                  int targetFloor) {
+            this.elevatorClient = elevatorClient;
+            this.elevatorShaft = elevatorShaft;
+            this.sourceFloor = sourceFloor;
+            this.targetFloor = targetFloor;
+        }
+        
+        public ElevatorOrder withOrderTime(double orderTime) {
             return new ElevatorOrder(elevatorClient,
                                      elevatorShaft,
                                      sourceFloor,
-                                     targetFloor);
+                                     targetFloor,
+                                     checkOrderTime(orderTime));
+        }
+        
+        private double checkOrderTime(double orderTime) {
+            if (Double.isNaN(orderTime) || Double.isInfinite(orderTime)) {
+                throw new IllegalArgumentException(
+                        "Bad order time: " + orderTime);
+            }
+            
+            return orderTime;
         }
     }
 }
