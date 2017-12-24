@@ -16,11 +16,6 @@ public final class ElevatorOrder {
     private final ElevatorClient elevatorClient;
     
     /**
-     * The target elevator shaft.
-     */
-    private final ElevatorShaft elevatorShaft;
-    
-    /**
      * The source floor.
      */
     private final int sourceFloor;
@@ -37,15 +32,29 @@ public final class ElevatorOrder {
     private final double orderTime;
     
     private ElevatorOrder(ElevatorClient elevatorClient,
-                          ElevatorShaft elevatorShaft,
                           int sourceFloor,
                           int targetFloor,
                           double orderTime) {
         this.elevatorClient = elevatorClient;
-        this.elevatorShaft = elevatorShaft;
         this.sourceFloor = sourceFloor;
         this.targetFloor = targetFloor;
         this.orderTime = orderTime;
+    }
+    
+    public ElevatorClient getElevatorClient() {
+        return elevatorClient;
+    }
+
+    public int getSourceFloor() {
+        return sourceFloor;
+    }
+
+    public int getTargetFloor() {
+        return targetFloor;
+    }
+
+    public double getOrderTime() {
+        return orderTime;
     }
     
     public static ElevatorClientSelector createNew() {
@@ -54,46 +63,24 @@ public final class ElevatorOrder {
     
     public static final class ElevatorClientSelector {
         
-        public ElevatorShaftSelector 
-        withElevatorClient(ElevatorClient elevatorClient) {
-            return new ElevatorShaftSelector(elevatorClient);
-        }
-    }
-    
-    public static final class ElevatorShaftSelector {
-
-        private final ElevatorClient elevatorClient;
-        
-        public ElevatorShaftSelector(ElevatorClient elevatorClient) {
-            this.elevatorClient = 
-                    Objects.requireNonNull(
-                            elevatorClient, 
-                            "The input ElevatorClient is null.");
-        }
-        
         public SourceFloorSelector 
-        withElevatorShaft(ElevatorShaft elevatorShaft) {
-            return new SourceFloorSelector(elevatorClient, elevatorShaft);
+        withElevatorClient(ElevatorClient elevatorClient) {
+            return new SourceFloorSelector(elevatorClient);
         }
     }
     
     public static final class SourceFloorSelector {
         
         private final ElevatorClient elevatorClient;
-        private final ElevatorShaft elevatorShaft;
         
-        private SourceFloorSelector(ElevatorClient elevatorClient,
-                                    ElevatorShaft elevatorShaft) {
-            this.elevatorClient = elevatorClient;
-            this.elevatorShaft = 
-                    Objects.requireNonNull(
-                            elevatorShaft,
-                            "The input ElevatorShaft is null.");
+        private SourceFloorSelector(ElevatorClient elevatorClient) {
+            this.elevatorClient = 
+                    Objects.requireNonNull(elevatorClient, 
+                                           "The ElevatorClient is null.");
         }
         
         public TargetFloorSelector withSourceFloor(int sourceFloor) {
-            return new TargetFloorSelector(elevatorClient, 
-                                           elevatorShaft, 
+            return new TargetFloorSelector(elevatorClient,
                                            sourceFloor);
         }
     }
@@ -101,20 +88,16 @@ public final class ElevatorOrder {
     public static final class TargetFloorSelector {
         
         private final ElevatorClient elevatorClient;
-        private final ElevatorShaft elevatorShaft;
         private final int sourceFloor;
         
         private TargetFloorSelector(ElevatorClient elevatorClient,
-                                    ElevatorShaft elevatorShaft,
                                     int sourceFloor) {
             this.elevatorClient = elevatorClient;
-            this.elevatorShaft = elevatorShaft;
             this.sourceFloor = sourceFloor;
         }
         
         public OrderTimeSelector withTargetFloor(int targetFloor) {
             return new OrderTimeSelector(elevatorClient,
-                                         elevatorShaft,
                                          sourceFloor,
                                          targetFloor);
         }
@@ -123,23 +106,19 @@ public final class ElevatorOrder {
     public static final class OrderTimeSelector {
         
         private final ElevatorClient elevatorClient;
-        private final ElevatorShaft elevatorShaft;
         private final int sourceFloor;
         private final int targetFloor;
         
         private OrderTimeSelector(ElevatorClient elevatorClient,
-                                  ElevatorShaft elevatorShaft,
                                   int sourceFloor,
                                   int targetFloor) {
             this.elevatorClient = elevatorClient;
-            this.elevatorShaft = elevatorShaft;
             this.sourceFloor = sourceFloor;
             this.targetFloor = targetFloor;
         }
         
         public ElevatorOrder withOrderTime(double orderTime) {
             return new ElevatorOrder(elevatorClient,
-                                     elevatorShaft,
                                      sourceFloor,
                                      targetFloor,
                                      checkOrderTime(orderTime));

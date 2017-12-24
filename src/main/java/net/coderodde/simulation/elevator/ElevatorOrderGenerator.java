@@ -59,7 +59,6 @@ public final class ElevatorOrderGenerator {
                     ElevatorOrder
                             .createNew()
                             .withElevatorClient(elevatorClient)
-                            .withElevatorShaft(elevatorShaft)
                             .withSourceFloor(sourceFloorNumber)
                             .withTargetFloor(targetFloorNumber)
                             .withOrderTime(orderTime);

@@ -6,6 +6,6 @@ package net.coderodde.simulation.elevator;
  * @author Rodion "rodde" Efremov
  * @version 1.6 (Dec 24, 2017)
  */
-public final class SimulationEngine {
+public final class SimulationRunner {
     
 }
