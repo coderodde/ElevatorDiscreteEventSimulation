@@ -55,7 +55,7 @@ public final class ElevatorOrder {
     public static final class ElevatorClientSelector {
         
         public ElevatorShaftSelector 
-        withElevatorShaft(ElevatorClient elevatorClient) {
+        withElevatorClient(ElevatorClient elevatorClient) {
             return new ElevatorShaftSelector(elevatorClient);
         }
     }

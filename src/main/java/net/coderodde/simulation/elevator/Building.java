@@ -14,4 +14,12 @@ public final class Building {
     public Building(ElevatorShaft... elevatorShafts) {
         this.elevatorShafts = elevatorShafts.clone();
     }
+    
+    public ElevatorShaft getElevatorShaft(int index) {
+        return elevatorShafts[index];
+    }
+    
+    public int getNumberOfElevatorShafts() {
+        return elevatorShafts.length;
+    }
 }

@@ -1,5 +1,8 @@
 package net.coderodde.simulation.elevator;
 
+import java.util.List;
+import java.util.Random;
+
 /**
  * This class contains generic utilities.
  * 
@@ -22,5 +25,9 @@ public final class Utils {
         }
         
         return time;
+    }
+    
+    public static <T> T choose(List<T> list, Random random) {
+        return list.get(random.nextInt(list.size()));
     }
 }
