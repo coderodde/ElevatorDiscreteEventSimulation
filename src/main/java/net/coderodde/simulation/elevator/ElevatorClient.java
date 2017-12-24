@@ -19,4 +19,16 @@ public class ElevatorClient {
     private ElevatorClient(double maximumPatienceTime) {
         this.maximumPatienceTime = checkTime(maximumPatienceTime);
     }
+    
+    public static MaximumPatienceTimeSelector createNew() {
+        return new MaximumPatienceTimeSelector();
+    }
+    
+    public static final class MaximumPatienceTimeSelector {
+        
+        public ElevatorClient
+        withMaximumPatienceTime(double maximumPatienceTime) {
+            return new ElevatorClient(maximumPatienceTime);
+        }
+    }
 }
